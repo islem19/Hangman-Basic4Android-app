@@ -1,0 +1,306 @@
+﻿Version=3.2
+IconFile=
+NumberOfModules=0
+Package=b4a.hangman
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=3
+File1=bullet.png
+File2=Main.bal
+File3=words.txt
+NumberOfLibraries=1
+Library1=core
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Hangman
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: Landscape
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: True
+	#IncludeTitle: False
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	'These variables can only be accessed from this module.
+	Dim buttons(9,3) As Button
+	Dim wordList As List
+	Dim counter As Int = 6
+	Dim character() As String
+	Dim k As Int = 0
+	Dim i , j As Int
+	character = Array As String ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"," "," "," ")
+	
+	Dim generate As Int
+	
+	
+	
+	
+	 
+	Private Label1 As Label
+	Private Label2 As Label
+	Private Label3 As Label
+	Private Label4 As Label
+	Private Label5 As Label
+	Private Label6 As Label
+	Private Label10 As Label
+	Private Label7 As Label
+	Private Label8 As Label
+	Private Label9 As Label
+	Dim wordpick As String
+	Private letters_lbl As Label
+	Private counter_lbl As Label
+	Private guess_lbl As Label
+	Private Label11 As Label
+	Private Panel1 As Panel
+	Private Panel2 As Panel
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	Activity.LoadLayout("Main")
+	
+	Panel1.SetLayout(0,0,100%x,100%y)
+	Panel2.SetLayout(0,0,100%x,100%y)
+	Panel2.Visible= False
+	
+	
+	counter_lbl.SetLayout(5%x,5%y,30%x,17%y)
+	letters_lbl.SetLayout(60%x,5%y,30%x,17%y)
+	
+	guess_lbl.SetLayout(5%x,20%y,35%x,20%y)
+	guess_lbl.TextSize = 25
+	guess_lbl.Text="Your Guess: "
+	Label1.SetLayout(40%x,20%y,5%x,20%y)
+	Label1.TextSize = 25
+	Label2.SetLayout(45%x,20%y,5%x,20%y)
+	Label2.TextSize = 25
+	Label3.SetLayout(50%x,20%y,5%x,20%y)
+	Label3.TextSize = 25
+	Label4.SetLayout(55%x,20%y,5%x,20%y)
+	Label4.TextSize = 25
+	Label5.SetLayout(60%x,20%y,5%x,20%y)
+	Label5.TextSize = 25
+	Label6.SetLayout(65%x,20%y,5%x,20%y)
+	Label6.TextSize = 25
+	Label7.SetLayout(70%x,20%y,5%x,20%y)
+	Label7.TextSize = 25
+	Label8.SetLayout(75%x,20%y,5%x,20%y)
+	Label8.TextSize = 25
+	Label9.SetLayout(80%x,20%y,5%x,20%y)
+	Label9.TextSize = 25
+	Label10.SetLayout(85%x,20%y,5%x,20%y)
+	Label10.TextSize = 25
+	Label11.SetLayout(90%x,20%y,5%x,20%y)
+	Label11.TextSize = 25
+	
+	Activity.AddMenuItem("Restart","restart")
+	Activity.AddMenuItem("About","about")
+	
+	
+	
+	Dim width, offsetX, offsetY As Int
+    width = 50dip
+    offsetX = (100%x - width * 10 - 2dip * 9) / 2
+    offsetY = (100%y - width * 3 - 2dip * 2) - 5dip
+	
+	
+	 For i = 0 To 8
+        For j = 0 To 2
+            Dim b As Button
+            b.Initialize("buttons") 'All buttons share the same event sub
+            b.TextSize = 25
+			
+            Activity.AddView(b,offsetX + i * (width + 2dip), offsetY + j * (width + 2dip), width, width)
+            buttons(i, j) = b 'store a reference to this view
+        Next
+    Next
+	
+	
+	wordList = File.ReadList(File.DirAssets, "words.txt")
+	generate = Rnd(0,wordList.Size -1)
+	For i = 0 To 8
+        For j = 0 To 2
+		buttons(i,j).Text = character(k)
+		k = k+1
+		Next
+	Next
+
+	
+	wordpick = wordList.Get(generate)
+	
+	counter_lbl.text = "You have: " & counter &" Attempts"
+	letters_lbl.Text = "The word has: " & wordpick.Length &" Letters"
+	
+	
+	
+	
+End Sub
+
+Sub about_Click
+	Panel2.Visible = True
+	Panel1.Visible = False
+	
+End Sub
+
+Sub restart_Click
+					Label1.Text =""
+					Label2.Text =""
+					Label3.Text =""
+					Label4.Text =""
+					Label5.Text =""
+					Label6.Text =""
+					Label7.Text =""
+					Label8.Text =""
+					Label9.Text =""
+					Label10.Text =""
+					Label11.Text =""
+					counter = 6
+					wordpick = wordList.Get(generate)
+					counter_lbl.text = "You have: " & counter &" Attempts"
+					letters_lbl.Text = "The word has: " & wordpick.Length &" Letters"	
+					generate = Rnd(0,wordList.Size -1)
+							For i = 0 To 8 
+								For j = 0 To 2 
+									buttons(i,j).Enabled = True
+							Next
+							Next
+End Sub
+
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub buttons_Click
+
+	Dim b As Button
+	b = Sender
+		
+	wordpick = wordList.Get(generate)
+	
+	If  wordpick.Contains( b.Text ) = True  Then 
+		b.Enabled = False
+		
+			If wordpick.IndexOf(b.Text) = 0 Then 
+					Label1.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 1 Then 
+					Label2.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 2 Then 
+					Label3.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 3 Then 
+					Label4.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 4 Then 
+					Label5.Text = b.Text	
+			End If
+			If wordpick.IndexOf(b.Text) = 5 Then 
+					Label6.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 6 Then 
+					Label7.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 7 Then 
+					Label8.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 8 Then 
+					Label9.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 9 Then 
+					Label10.Text = b.Text
+			End If
+			If wordpick.IndexOf(b.Text) = 10 Then 
+					Label11.Text = b.Text
+			End If 	
+	Else
+		b.Enabled = False
+		counter = counter - 1
+		counter_lbl.text = "You have: " & counter &" Attempts"
+	End If 
+	
+				If counter = 0 Then 
+				Msgbox("you Lost, the word is : "& wordpick,"Game Over")
+				Dim response As Int 
+				response = Msgbox2("You want to play again ?","New Game","Yes","Cancel","No",LoadBitmap(File.DirAssets,"bullet.png"))
+					If  DialogResponse.POSITIVE = response Then 
+							generate = Rnd(0,wordList.Size -1)
+							For i = 0 To 8 
+								For j = 0 To 2 
+									buttons(i,j).Enabled = True
+							Next
+							Next
+					Label1.Text =""
+					Label2.Text =""
+					Label3.Text =""
+					Label4.Text =""
+					Label5.Text =""
+					Label6.Text =""
+					Label7.Text =""
+					Label8.Text =""
+					Label9.Text =""
+					Label10.Text =""
+					Label11.Text =""
+					counter = 6
+					wordpick = wordList.Get(generate)
+					counter_lbl.text = "You have: " & counter &" Attempts"
+					letters_lbl.Text = "The word has: " & wordpick.Length &" Letters"				 
+					Else 
+						Activity.Finish
+					End If 
+				Else
+					If wordpick = Label1.Text & Label2.Text & Label3.Text & Label4.Text & Label5.Text & Label6.Text & Label7.Text & Label8.Text & Label9.Text & Label10.Text & Label11.Text Then 
+					Msgbox("You Found the Word" ,"Game Over")
+					Dim response As Int 
+				response = Msgbox2("You want to play again ?","New Game","Yes","Cancel","No",LoadBitmap(File.DirAssets,"bullet.png"))
+					If  DialogResponse.POSITIVE = response Then 
+							generate = Rnd(0,wordList.Size -1)
+							For i = 0 To 8 
+								For j = 0 To 2 
+									buttons(i,j).Enabled = True
+							Next
+							Next
+					Label1.Text =""
+					Label2.Text =""
+					Label3.Text =""
+					Label4.Text =""
+					Label5.Text =""
+					Label6.Text =""
+					Label7.Text =""
+					Label8.Text =""
+					Label9.Text =""
+					Label10.Text =""
+					Label11.Text =""
+					counter = 6
+					wordpick = wordList.Get(generate)
+					counter_lbl.text = "You have: " & counter &" Attempts"
+					letters_lbl.Text = "The word has: " & wordpick.Length &" Letters"				 
+					Else 
+						Activity.Finish
+					End If 
+					End If 
+				End If	
+	
+	
+End Sub
+
+
+
